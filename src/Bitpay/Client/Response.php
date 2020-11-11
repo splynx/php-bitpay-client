@@ -71,9 +71,8 @@ class Response implements ResponseInterface
 
         for ($i = 0; $i < $linesLen; $i++) {
             if (0 == $i) {
-                preg_match('/^HTTP\/(\d\.\d)\s(\d+)\s(.+)/', $lines[$i], $statusLine);
-    
-                $response->setStatusCode($statusCode = $statusLine[2]);
+                preg_match('/^HTTP\/(\d\.*\d*)\s(\d+)\s*(.*)/', $lines[$i], $statusLine);
+                $response->setStatusCode(isset($statusLine[2]) ? $statusLine[2] : 500);
 
                 continue;
             }
@@ -126,6 +125,7 @@ class Response implements ResponseInterface
      * Set the body of the response
      *
      * @param string $body
+     * @return Response
      */
     public function setBody($body)
     {
@@ -145,6 +145,7 @@ class Response implements ResponseInterface
     /**
      * @param string $header
      * @param string $value
+     * @return Response
      */
     public function setHeader($header, $value)
     {
